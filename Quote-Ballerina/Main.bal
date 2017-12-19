@@ -14,8 +14,8 @@ public function main (string[] args) {
     }
 }
 
-function onTriggerFunction()(error e) {
-    structs:Quote q = quote:lookupQuote(quote:nextTicker()); 
+function onTriggerFunction () (error e) {
+    structs:Quote q = quote:lookupQuote(quote:nextTicker());
     println(q);
     return;
 }
