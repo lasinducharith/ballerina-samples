@@ -1,6 +1,6 @@
 # Cafe Example
 Ballerina Implementation of Spring Cafe sample
-https://github.com/spring-projects/spring-integration-samples/tree/master/applications/cafe
+https://github.com/spring-projects/spring-integration-samples/tree/master/applications/cafe/cafe-si
 
 ## How to run
 Execute the Main function of the program.
