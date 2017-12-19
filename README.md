@@ -1,2 +1,2 @@
 # ballerina-samples
-Some common samples from Ballerina
+This repository contains a set of samples(spring/go) implemented from Ballerina Language.
