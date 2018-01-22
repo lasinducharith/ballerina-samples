@@ -4,6 +4,7 @@ import ballerina.math;
 import structs;
 
 public function lookupQuote(string ticker)(structs:Quote quote){
-    quote = {price: math:random()*100, ticker:ticker};
+    float randomFormattedNumber = decimalFormat(math:random() * 100);
+    quote = {price: randomFormattedNumber, ticker:ticker};
     return quote;
 }

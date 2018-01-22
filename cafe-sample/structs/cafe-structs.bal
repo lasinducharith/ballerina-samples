@@ -6,10 +6,11 @@ public struct Order {
 }
 
 public struct OrderItem {
-    boolean iced;
-    int shots;
-    int orderNumber;
     DrinkType drinkType;
+    int shots;
+    boolean iced = false;
+    int orderNumber;
+
 }
 
 public struct Delivery {
