@@ -4,6 +4,7 @@ import ballerina.log;
 
 public function main (string[] args) {
     int count = 1;
+    // max orders count set to 100
     while (count <= 100) {
         structs:Order order = {};
         order.number = count;

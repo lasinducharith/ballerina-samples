@@ -10,7 +10,6 @@ public struct OrderItem {
     int shots;
     boolean iced = false;
     int orderNumber;
-
 }
 
 public struct Delivery {

@@ -3,14 +3,32 @@ import ballerina.io;
 import ballerina.data.sql;
 import ballerina.log;
 import structs;
-import constants;
+import ballerina.config;
+
+string host;
+int port;
+string username;
+string password;
+string database;
+int batchSize;
+string datafileUrl;
+
 
 public function main (string[] args) {
 
-    io:CharacterChannel characterChannel = getFileCharacterChannel(constants:DATA_FILE_URL, "r", "UTF-8");
+    // Read configuration values from ballerina.conf
+    host = config:getGlobalValue("mysql.host");
+    port, _ = <int>config:getGlobalValue("mysql.port");
+    username = config:getGlobalValue("mysql.username");
+    password = config:getGlobalValue("mysql.password");
+    database = config:getGlobalValue("mysql.database");
+    batchSize, _ = <int> config:getGlobalValue("batch.size");
+    datafileUrl = config:getGlobalValue("datafile.url");
+
+    io:CharacterChannel characterChannel = getFileCharacterChannel(datafileUrl, "r", "UTF-8");
     io:TextRecordChannel textRecordChannel = characterChannel.toTextRecordChannel("\\r?\\n", ",");
     // CSV Records as a string array of arrays
-    string[][] stringRecords = readRecords(textRecordChannel, constants:BATCH_SIZE);
+    string[][] stringRecords = readRecords(textRecordChannel, batchSize);
     // Generate a Persons' struct array
     structs:Person[] persons = personItemProcessor(stringRecords);
     // Insert persons data to mysql database
@@ -45,7 +63,7 @@ function personItemProcessor (string[][] stringRecords) (structs:Person[]) {
     structs:Person[] persons = [];
     int count = 0;
     try {
-        while (count < constants:BATCH_SIZE) {
+        while (count < batchSize) {
             string[] s = stringRecords[count];
             structs:Person person = {};
             person.firstName = s[0].toUpperCase();
@@ -64,8 +82,8 @@ function personItemProcessor (string[][] stringRecords) (structs:Person[]) {
 function insertDataToDatabase (structs:Person[] persons) {
 
     endpoint<sql:ClientConnector> personsDB {
-        create sql:ClientConnector(sql:DB.MYSQL, constants:DATABASE_HOST, constants:DATABASE_PORT, constants:DATABASE_NAME,
-                                   constants:DATABASE_USERNAME, constants:DATABASE_PASSWORD, {maximumPoolSize:5});
+        create sql:ClientConnector(sql:DB.MYSQL, host, port, database,
+                                   username, password, {maximumPoolSize:5});
     }
 
     try {
@@ -75,10 +93,10 @@ function insertDataToDatabase (structs:Person[] persons) {
 
         sql:Parameter[][] batchParameters = [];
         int count = 0;
-        while (count < constants:BATCH_SIZE) {
-            sql:Parameter parameter1 = {sqlType:sql:Type.VARCHAR, value:persons[count].firstName};
-            sql:Parameter parameter2 = {sqlType:sql:Type.VARCHAR, value:persons[count].lastName};
-            batchParameters[count] = [parameter1, parameter2];
+        while (count < batchSize) {
+            sql:Parameter firstNameParameter = {sqlType:sql:Type.VARCHAR, value:persons[count].firstName};
+            sql:Parameter lastNameParameter = {sqlType:sql:Type.VARCHAR, value:persons[count].lastName};
+            batchParameters[count] = [firstNameParameter, lastNameParameter];
             count = count + 1;
         }
 

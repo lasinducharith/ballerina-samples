@@ -26,7 +26,6 @@ public function placeOrder (structs:Order order) (structs:Drink[] drinks) {
 
                 }
                 coldDrinks -> fork;
-
             }
 
             worker w2 {
@@ -44,13 +43,21 @@ public function placeOrder (structs:Order order) (structs:Drink[] drinks) {
             }
 
         } join (all) (map results) {
-            var resW1, _ = (any[])results["w1"];
-            var resW2, _ = (any[])results["w2"];
+            var resultW1, _ = (any[])results["w1"];
+            var resultW2, _ = (any[])results["w2"];
 
-            // TODO: No way to cast any[] to Drink[], hence hard-coding preparedDrinks
-            preparedDrinks[0] = {drinkType:structs:DrinkType.LATTE, shots:2, iced:true, orderNumber:order.number};
-            preparedDrinks[1] = {drinkType:structs:DrinkType.MOCHA, shots:3, iced:false, orderNumber:order.number};
-            preparedDrinks[2] = {drinkType:structs:DrinkType.CAPPUCCINO, shots:1, iced:false, orderNumber:order.number};
+            var coldDrinks, _ = (structs:Drink[])resultW1[0];
+            var hotDrinks, _ = (structs:Drink[])resultW2[0];
+            any[] concatenatedDrinksArray = concatArrays(coldDrinks, hotDrinks);
+
+            // TODO: Replacing array casting with a while loop
+            //preparedDrinks, _ = (structs:Drink[])concatenatedDrinksArray;
+            int count = 0;
+            while (count < lengthof concatenatedDrinksArray) {
+                preparedDrinks[count], _ = (structs:Drink)concatenatedDrinksArray[count];
+                count = count + 1;
+            }
+
 
         }
     }

@@ -1,6 +1,6 @@
 package functions;
 
-// Concatenating any arrays
+// Concatenating any type arrays
 public function concatArrays (any[] array1, any[] array2) (any[]) {
     int array1Length = lengthof array1;
     int array2Length = lengthof array2;
