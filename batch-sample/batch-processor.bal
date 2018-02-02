@@ -105,6 +105,7 @@ function insertDataToDatabase (structs:Person[] persons) {
 
     } catch (error e) {
         log:printInfo("Error updating the database: " + e.msg);
+
     } finally {
         personsDB.close();
     }

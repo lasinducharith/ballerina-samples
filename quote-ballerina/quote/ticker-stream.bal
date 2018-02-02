@@ -3,7 +3,7 @@ package quote;
 import ballerina.math;
 import ballerina.log;
 
-// Generate a random 3-digit number
+// Generate a random 3-digit string
 public function nextTicker () (string ticker) {
 
     string[] alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",

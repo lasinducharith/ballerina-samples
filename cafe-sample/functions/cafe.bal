@@ -33,7 +33,7 @@ public function placeOrder (structs:Order order) (structs:Drink[] drinks) {
                 int j = 0;
                 structs:Drink[] hotDrinks = [];
                 while (i < orderLength) {
-                    if (orderItems[i].iced == false) {
+                    if (!orderItems[i].iced) {
                         hotDrinks[j] = prepareHotDrink(orderItems[i]);
                         j = j + 1;
                     }
